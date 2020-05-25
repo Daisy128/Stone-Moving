@@ -123,9 +123,10 @@ public class StoneState implements Cloneable {
             for (int i = row - 1; i <= row + 1; i++)
                 for (int j = col - 1; j <= col + 1; j++){
                     if(i<0||i>7||j<0||j>7);
-                    else if (matrix[row][col] == Board.STONE && matrix[i][j] == Board.STONE){
-                        matrix[i][j] = Board.of(CURRENT[i][j]);
-                        break;}
+                    else if(row==i && col==j);
+                        else if (matrix[row][col] == Board.STONE && matrix[i][j] == Board.STONE )
+                             {  matrix[i][j] = Board.of(CURRENT[i][j]); break;}
+
                 }
         } catch (Exception e) {
             throw new ArrayIndexOutOfBoundsException();

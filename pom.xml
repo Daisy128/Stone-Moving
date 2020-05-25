@@ -8,8 +8,8 @@
     <version>1.0</version>
     <description>The stone moving board game.</description>
     <scm>
-        <connection>https://github.com/Daisy128/stone-puzzle.git</connection>
-        <developerConnection>https://github.com/Daisy128/stone-puzzle.git</developerConnection>
+        <connection>https://github.com/Daisy128/stonemoving.git</connection>
+        <developerConnection>https://github.com/Daisy128/stonemoving.git</developerConnection>
     </scm>
     <developers>
         <developer>

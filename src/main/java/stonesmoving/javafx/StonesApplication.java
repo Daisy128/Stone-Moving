@@ -21,7 +21,7 @@ public class StonesApplication extends Application {
             new AbstractModule() {
                 @Override
                 protected void configure() {
-                     install(new PersistenceModule("stonestate"));
+                     install(new PersistenceModule("stone-puzzle"));
                      bind(GameResultDao.class);
                  }
             }

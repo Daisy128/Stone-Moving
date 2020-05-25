@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -48,7 +49,7 @@ public class GameController {
     private IntegerProperty steps = new SimpleIntegerProperty();
     private IntegerProperty scores = new SimpleIntegerProperty();
     private Instant startTime;
-    private List<Image> cubeImages;
+    private List<Image> stoneImages;
 
     @FXML
     private TextField display;
@@ -81,6 +82,9 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        stoneImages =List.of(
+                new Image(getClass().getResource("/images/stone.png").toExternalForm())
+        );
         stepsLabel.textProperty().bind(steps.asString());
         gameOver.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -97,7 +101,7 @@ public class GameController {
     private void resetGame() {
         gameState = new StoneState(StoneState.INITIAL);
         steps.set(0);
-        scores.set(0);
+        scores.set(4);
         startTime = Instant.now();
         gameOver.setValue(false);
         createStopWatch();
@@ -106,15 +110,13 @@ public class GameController {
     }
 
     private void displayGameState() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                int mark = Integer.parseInt(display.getText());
-            }
-        }
+        ImageView view = (ImageView) gameGrid.getChildren().get(0);
+        log.trace("Image = {}", view.getImage());
+        view.setImage(stoneImages.get(gameState.getMatrix()[0][0].getValue()));
     }
 
 
-    public void handleClickOnCube(MouseEvent mouseEvent) {
+    public void handleClickOnStone(MouseEvent mouseEvent) {
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         String mark = ((Node) mouseEvent.getSource()).getAccessibleText();
