@@ -61,6 +61,9 @@ public class GameController {
     private GridPane gameGrid;
 
     @FXML
+    private Label scoresLabel;
+
+    @FXML
     private Label stepsLabel;
 
     @FXML
@@ -85,6 +88,7 @@ public class GameController {
         stoneImages =List.of(
                 new Image(getClass().getResource("/images/stone.png").toExternalForm())
         );
+        scoresLabel.textProperty().bind(scores.asString());
         stepsLabel.textProperty().bind(steps.asString());
         gameOver.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -105,18 +109,39 @@ public class GameController {
         startTime = Instant.now();
         gameOver.setValue(false);
         createStopWatch();
-        displayGameState();
+        displayGameState(0,0);
         Platform.runLater(() -> messageLabel.setText("Good luck, " + playerName + "!"));
     }
 
-    private void displayGameState() {
+
+    private void displayGameState(int row,int col) {
         ImageView view = (ImageView) gameGrid.getChildren().get(0);
-        log.trace("Image = {}", view.getImage());
-        view.setImage(stoneImages.get(gameState.getMatrix()[0][0].getValue()));
+        log.trace("Image({}, {}) = {}", row, col, view.getImage());
+        view.setImage(stoneImages.get(gameState.getMatrix()[row][col].getValue()));
     }
 
 
     public void handleClickOnStone(MouseEvent mouseEvent) {
+        int row = GridPane.getRowIndex((Button) mouseEvent.getSource());
+        int col = GridPane.getColumnIndex((Button) mouseEvent.getSource());
+        String mark = ((Button) mouseEvent.getSource()).getText();
+        log.debug("Cube ({}, {}) is pressed", row, col);
+        if (! gameState.isSolved() && gameState.canBeMoved(row, col)) {
+            steps.set(steps.get() + 1);
+            scores.set(scores.get() + Integer.parseInt(mark));
+            gameState.moveToNext(row, col);
+            if (gameState.isSolved()) {
+                gameOver.setValue(true);
+                log.info("Player {} has solved the game in {} steps with {} scores", playerName, steps.get(),scores.get());
+                messageLabel.setText("Congratulations, " + playerName + "!");
+                resetButton.setDisable(true);
+                giveUpButton.setText("Finish");
+            }
+        }
+        displayGameState(row,col);
+    }
+
+   /* public void handleClickOnStone(MouseEvent mouseEvent) {
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         String mark = ((Node) mouseEvent.getSource()).getAccessibleText();
@@ -134,7 +159,7 @@ public class GameController {
             }
         }
         displayGameState();
-    }
+    }*/
 
     public void handleResetButton(ActionEvent actionEvent)  {
         log.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
