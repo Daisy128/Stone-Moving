@@ -47,12 +47,9 @@ public class GameController {
     private String playerName;
     private StoneState gameState;
     private IntegerProperty steps = new SimpleIntegerProperty();
-    private IntegerProperty scores = new SimpleIntegerProperty();
+  //  private IntegerProperty scores = new SimpleIntegerProperty();
     private Instant startTime;
     private List<Image> stoneImages;
-
-    @FXML
-    private TextField display;
 
     @FXML
     private Label messageLabel;
@@ -60,8 +57,8 @@ public class GameController {
     @FXML
     private GridPane gameGrid;
 
-    @FXML
-    private Label scoresLabel;
+  //  @FXML
+  //  private Label scoresLabel;
 
     @FXML
     private Label stepsLabel;
@@ -88,7 +85,7 @@ public class GameController {
         stoneImages =List.of(
                 new Image(getClass().getResource("/images/stone.png").toExternalForm())
         );
-        scoresLabel.textProperty().bind(scores.asString());
+ //       scoresLabel.textProperty().bind(scores.asString());
         stepsLabel.textProperty().bind(steps.asString());
         gameOver.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -105,7 +102,7 @@ public class GameController {
     private void resetGame() {
         gameState = new StoneState(StoneState.INITIAL);
         steps.set(0);
-        scores.set(4);
+   //     scores.set(4);
         startTime = Instant.now();
         gameOver.setValue(false);
         createStopWatch();
@@ -124,15 +121,16 @@ public class GameController {
     public void handleClickOnStone(MouseEvent mouseEvent) {
         int row = GridPane.getRowIndex((Button) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Button) mouseEvent.getSource());
-        String mark = ((Button) mouseEvent.getSource()).getText();
+     //   String mark = ((Button) mouseEvent.getSource()).getText();
         log.debug("Cube ({}, {}) is pressed", row, col);
         if (! gameState.isSolved() && gameState.canBeMoved(row, col)) {
             steps.set(steps.get() + 1);
-            scores.set(scores.get() + Integer.parseInt(mark));
+      //      scores.set(scores.get() + Integer.parseInt(mark));
             gameState.moveToNext(row, col);
             if (gameState.isSolved()) {
                 gameOver.setValue(true);
-                log.info("Player {} has solved the game in {} steps with {} scores", playerName, steps.get(),scores.get());
+           //     log.info("Player {} has solved the game in {} steps with {} scores", playerName, steps.get(),scores.get());
+                log.info("Player {} has solved the game in {} steps", playerName, steps.get());
                 messageLabel.setText("Congratulations, " + playerName + "!");
                 resetButton.setDisable(true);
                 giveUpButton.setText("Finish");
@@ -140,26 +138,6 @@ public class GameController {
         }
         displayGameState(row,col);
     }
-
-   /* public void handleClickOnStone(MouseEvent mouseEvent) {
-        int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
-        int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-        String mark = ((Node) mouseEvent.getSource()).getAccessibleText();
-        log.debug("Cube ({}, {}) is pressed", row, col);
-        if (! gameState.isSolved() && gameState.canBeMoved(row, col)) {
-            steps.set(steps.get() + 1);
-            scores.set(scores.get() + Integer.parseInt(mark));
-            gameState.moveToNext(row, col);
-            if (gameState.isSolved()) {
-                gameOver.setValue(true);
-                log.info("Player {} has solved the game in {} steps with {} scores", playerName, steps.get(),scores.get());
-                messageLabel.setText("Congratulations, " + playerName + "!");
-                resetButton.setDisable(true);
-                giveUpButton.setText("Finish");
-            }
-        }
-        displayGameState();
-    }*/
 
     public void handleResetButton(ActionEvent actionEvent)  {
         log.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
@@ -188,7 +166,7 @@ public class GameController {
                 .player(playerName)
                 .solved(gameState.isSolved())
                 .duration(Duration.between(startTime, Instant.now()))
-                .scores(scores.get())
+              //  .scores(scores.get())
                 .steps(steps.get())
                 .build();
         return result;

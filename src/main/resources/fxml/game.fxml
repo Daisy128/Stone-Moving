@@ -109,8 +109,6 @@
                   <Insets bottom="20.0" />
                </VBox.margin>
             </Label>
-            <Label text="Scores" />
-            <Label fx:id="scoresLabel" text="0" />
             <Label text="Steps:" />
             <Label fx:id="stepsLabel" text="0" />
          </children>
